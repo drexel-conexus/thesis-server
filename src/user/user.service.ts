@@ -6,100 +6,57 @@ import {
 } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './schema/user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('SUPABASE_CLIENT') private supabase: SupabaseClient) {}
+  constructor(
+    @InjectModel(User.modelName) private model: Model<UserDocument>,
+  ) {}
 
   async exists(email: string): Promise<boolean> {
-    const { data, error } = await this.supabase
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single();
-
-    if (error) {
-      // Handle errors appropriately (e.g., throw an exception)
-      throw new Error(error.message);
+    const doc = await this.model.findOne({ email });
+    if (doc) {
+      return true;
     }
-
-    return !!data;
+    return false;
   }
 
-  async create(user: CreateUserDto): Promise<User> {
+  async create(user: CreateUserDto): Promise<UserDocument> {
+    user.password = await argon2.hash(user.password);
     const exists = await this.exists(user.email);
     if (exists) {
       throw new BadRequestException('User already exists');
     }
-    const { data, error } = await this.supabase
-      .from('users')
-      .insert(user)
-      .single();
-
-    if (error) {
-      // Handle errors appropriately (e.g., throw an exception)
-      throw new Error(error.message);
-    }
-
-    return data as User;
+    return this.model.create(user);
   }
 
-  async findAll(): Promise<User[]> {
-    const { data, error } = await this.supabase.from('users').select('*');
-
-    if (error) {
-      // Handle Supabase errors
-      throw new Error('Error fetching users');
-    }
-
-    return data as User[];
+  async findAll(): Promise<UserDocument[]> {
+    const list = await this.model.find();
+    return list;
   }
 
-  async findOne(id: string): Promise<User> {
-    const { data, error } = await this.supabase
-      .from('users')
-      .select('*')
-      .eq('id', id)
-      .single();
+  async findOne(id: string): Promise<UserDocument> {
+    const doc = await this.model.findById(id);
+    return doc;
+  }
 
-    if (error) {
-      // Handle Supabase errors
-      throw new Error('Error fetching user');
-    }
-
-    if (!data) {
+  async update(id: string, updatedUser: UpdateUserDto): Promise<UserDocument> {
+    const doc = await this.findOne(id);
+    if (!doc) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
-    return data as User;
+    doc.set(updatedUser);
+    await doc.save();
+    return doc;
   }
 
-  async update(id: string, updatedUser: UpdateUserDto): Promise<User> {
-    const { data, error } = await this.supabase
-      .from('users')
-      .update(updatedUser)
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      // Handle Supabase errors
-      throw new Error('Error updating user');
-    }
-
-    if (!data) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-
-    return data as User;
-  }
-
-  async remove(id: string): Promise<void> {
-    const { error } = await this.supabase.from('users').delete().eq('id', id);
-
-    if (error) {
-      // Handle Supabase errors
-      throw new Error('Error deleting user');
-    }
+  async remove(id: string): Promise<boolean> {
+    await this.model.deleteOne({ _id: id });
+    return true;
   }
 }

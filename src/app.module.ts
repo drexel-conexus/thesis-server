@@ -1,26 +1,39 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { createClient } from '@supabase/supabase-js';
 import { UserModule } from './user/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
+import { ClsModule } from 'nestjs-cls';
+import { EventsModule } from './events/events.module';
+import { AnnouncementModule } from './announcement/announcement.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // Make ConfigService available globally
       envFilePath: '.env', // Explicitly specify the .env file path
     }),
-    UserModule,
-  ],
-  providers: [
-    {
-      provide: 'SUPABASE_CLIENT',
-      useFactory: (configService: ConfigService) => {
-        const supabaseUrl = configService.get<string>('SUPABASE_URL');
-        const supabaseKey = configService.get<string>('SUPABASE_ANON_KEY');
-        return createClient(supabaseUrl, supabaseKey);
+    MongooseModule.forRoot(
+      'mongodb+srv://mongodb:FSCVeQhKeyKfbf07@cluster0.kyw0ibx.mongodb.net/dev?retryWrites=true&w=majority',
+    ),
+    // MongooseModule.forRootAsync({
+    //   connectionName: 'main',
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => {
+    //     mongoose.set('debug', true);
+    //     const uri = configService.get<string>('MONGO_URI');
+    //     return { uri };
+    //   },
+    // }),
+    ClsModule.forRoot({
+      middleware: {
+        mount: true,
       },
-      inject: [ConfigService],
-    },
+    }),
+    UserModule,
+    EventsModule,
+    AnnouncementModule,
   ],
-  exports: ['SUPABASE_CLIENT'],
+  providers: [],
 })
 export class AppModule {}
