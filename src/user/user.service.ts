@@ -25,6 +25,20 @@ export class UserService {
     return false;
   }
 
+  async login(loginDto: { email: string; password: string }) {
+    const doc = await this.model.findOne({
+      email: loginDto.email,
+    });
+    if (!doc) {
+      throw new NotFoundException('User not found');
+    }
+    const valid = await argon2.verify(doc.password, loginDto.password);
+    if (!valid) {
+      throw new BadRequestException('Invalid password');
+    }
+    return doc;
+  }
+
   async create(user: CreateUserDto): Promise<UserDocument> {
     user.password = await argon2.hash(user.password);
     const exists = await this.exists(user.email);
