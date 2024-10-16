@@ -6,30 +6,22 @@ import mongoose from 'mongoose';
 import { ClsModule } from 'nestjs-cls';
 import { EventsModule } from './events/events.module';
 import { AnnouncementModule } from './announcement/announcement.module';
+import { S3Module } from './s3/s3.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Make ConfigService available globally
-      envFilePath: '.env', // Explicitly specify the .env file path
+      isGlobal: true,
+      envFilePath: '.env',
     }),
     MongooseModule.forRoot(
       'mongodb+srv://mongodb:FSCVeQhKeyKfbf07@cluster0.kyw0ibx.mongodb.net/dev?retryWrites=true&w=majority',
     ),
-    // MongooseModule.forRootAsync({
-    //   connectionName: 'main',
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => {
-    //     mongoose.set('debug', true);
-    //     const uri = configService.get<string>('MONGO_URI');
-    //     return { uri };
-    //   },
-    // }),
     ClsModule.forRoot({
       middleware: {
         mount: true,
       },
     }),
+    S3Module,
     UserModule,
     EventsModule,
     AnnouncementModule,
