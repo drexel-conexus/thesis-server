@@ -30,6 +30,12 @@ export class Announcement {
 
   @Prop({ required: false })
   imageUrl: string;
+
+  @Prop({ required: false, type: Object })
+  image: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export const AnnouncementSchema = SchemaFactory.createForClass(Announcement);

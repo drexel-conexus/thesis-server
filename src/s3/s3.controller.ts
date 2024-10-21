@@ -5,6 +5,8 @@ import {
   UploadedFile,
   UploadedFiles,
   Body,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import {
   FileFieldsInterceptor,
@@ -43,6 +45,11 @@ export class UploadController {
     const file = files.image[0];
     const s3Key = `assets/${+new Date()}/${file.originalname}`;
     await this.s3Service.uploadFile(s3Key, file.buffer, file.mimetype);
-    return { s3Key: s3Key, url: this.s3Service.getPublicUrl(s3Key) };
+    return { s3Key: s3Key, s3Url: this.s3Service.getPublicUrl(s3Key) };
+  }
+
+  @Delete(':s3Key')
+  async deleteFile(@Param('s3Key') s3Key: string) {
+    await this.s3Service.deleteFile(s3Key);
   }
 }

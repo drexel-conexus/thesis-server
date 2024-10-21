@@ -49,7 +49,10 @@ export class CreateEventDto {
     type: 'string',
     description: 'Image URL of the event',
   })
-  imageUrl: string;
+  image: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export class UpdateEventDto extends PartialType(CreateEventDto) {}

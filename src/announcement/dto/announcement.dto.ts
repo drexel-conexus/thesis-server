@@ -64,6 +64,16 @@ export class CreateAnnouncementDto {
     description: 'Author of the announcement',
   })
   author: string;
+
+  @IsOptional()
+  @ApiProperty({
+    type: 'object',
+    description: 'Image of the announcement',
+  })
+  image: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export class UpdateAnnouncementDto extends PartialType(CreateAnnouncementDto) {}

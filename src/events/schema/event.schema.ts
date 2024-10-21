@@ -22,8 +22,11 @@ export class Event {
   @Prop({ required: false })
   footer: string;
 
-  @Prop({ required: false })
-  imageUrl: string;
+  @Prop({ required: false, type: Object })
+  image: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
