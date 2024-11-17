@@ -11,22 +11,19 @@ export class Announcement {
   title: string;
 
   @Prop({ required: false })
-  subtitle: string;
-
-  @Prop({ required: false })
   body: string;
 
   @Prop({ required: false, type: Date })
-  date: Date;
+  startDate: Date;
+
+  @Prop({ required: false, type: Date })
+  endDate: Date;
 
   @Prop({ required: true, default: true })
   active: boolean;
 
   @Prop({ required: false })
   author: string;
-
-  @Prop({ required: false })
-  footer: string;
 
   @Prop({ required: false })
   imageUrl: string;
