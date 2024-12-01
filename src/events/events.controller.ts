@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto, UpdateEventDto } from './dto/event.dto';
@@ -22,6 +23,11 @@ export class EventsController {
   @Get()
   findAll() {
     return this.eventsService.findAll();
+  }
+
+  @Get('current-month')
+  getCurrentMonthEvents(@Query('month') month?: number) {
+    return this.eventsService.getCurrentMonthEvents(month);
   }
 
   @Get(':id')

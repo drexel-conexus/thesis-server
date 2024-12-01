@@ -9,13 +9,17 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { JwtService } from './jwt.service';
 
 @Controller({
   version: '1',
   path: 'users',
 })
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -43,7 +47,14 @@ export class UserController {
   }
 
   @Post('login')
-  login(@Body() loginDto: { email: string; password: string }) {
-    return this.userService.login(loginDto);
+  async login(@Body() loginDto: { email: string; password: string }) {
+    const doc = await this.userService.login(loginDto);
+    const generatedToken = await this.jwtService.generateToken({
+      id: doc._id,
+    });
+    return {
+      ...doc.toObject(),
+      token: generatedToken,
+    };
   }
 }

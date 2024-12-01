@@ -14,6 +14,20 @@ export class EventsService {
     return this.model.create(createEventDto);
   }
 
+  getCurrentMonthEvents(month?: number) {
+    const now = new Date();
+    const targetMonth = month !== undefined ? month : now.getMonth();
+    const startOfMonth = new Date(now.getFullYear(), targetMonth, 1);
+    const endOfMonth = new Date(now.getFullYear(), targetMonth + 1, 0);
+
+    return this.model.find({
+      date: {
+        $gte: startOfMonth,
+        $lte: endOfMonth,
+      },
+    });
+  }
+
   findAll() {
     return this.model.find();
   }
