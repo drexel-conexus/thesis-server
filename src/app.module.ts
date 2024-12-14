@@ -7,6 +7,7 @@ import { ClsModule } from 'nestjs-cls';
 import { EventsModule } from './events/events.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { S3Module } from './s3/s3.module';
+import { AssetModule } from './asset/asset.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,6 +26,7 @@ import { S3Module } from './s3/s3.module';
     UserModule,
     EventsModule,
     AnnouncementModule,
+    AssetModule,
   ],
   providers: [],
 })
