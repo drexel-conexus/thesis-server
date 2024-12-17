@@ -7,6 +7,7 @@ import {
   Body,
   Delete,
   Param,
+  Query,
 } from '@nestjs/common';
 import {
   FileFieldsInterceptor,
@@ -48,8 +49,8 @@ export class UploadController {
     return { s3Key: s3Key, s3Url: this.s3Service.getPublicUrl(s3Key) };
   }
 
-  @Delete(':s3Key')
-  async deleteFile(@Param('s3Key') s3Key: string) {
+  @Delete('delete')
+  async deleteFile(@Query('s3Key') s3Key: string) {
     await this.s3Service.deleteFile(s3Key);
   }
 }

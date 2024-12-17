@@ -16,6 +16,21 @@ export class AnnouncementService {
     @InjectModel(Announcement.modelName) private model: Model<Announcement>,
   ) {}
 
+  getCurrentMonthAnnouncements() {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return this.model.find(
+      {
+        date: { $gte: startOfMonth, $lte: endOfMonth },
+      },
+      {
+        sort: { date: -1 },
+      },
+      { limit: 4 },
+    );
+  }
+
   create(createAnnouncementDto: CreateAnnouncementDto) {
     return this.model.create(createAnnouncementDto);
   }

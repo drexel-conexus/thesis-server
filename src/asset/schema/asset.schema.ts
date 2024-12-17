@@ -16,12 +16,14 @@ export class Asset {
       {
         s3Key: { type: String },
         s3Url: { type: String },
+        title: { type: String, required: false },
       },
     ],
   })
   images: {
     s3Key: string;
     s3Url: string;
+    title?: string;
   }[];
 }
 

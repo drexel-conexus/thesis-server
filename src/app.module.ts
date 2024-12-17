@@ -8,6 +8,7 @@ import { EventsModule } from './events/events.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { S3Module } from './s3/s3.module';
 import { AssetModule } from './asset/asset.module';
+import { RegistrationModule } from './registration/registration.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,6 +28,7 @@ import { AssetModule } from './asset/asset.module';
     EventsModule,
     AnnouncementModule,
     AssetModule,
+    RegistrationModule,
   ],
   providers: [],
 })

@@ -17,8 +17,16 @@ export class CreateAssetDto {
   @ApiProperty({
     type: 'array',
     description: 'Images of the asset',
+    items: {
+      type: 'object',
+      properties: {
+        s3Key: { type: 'string' },
+        s3Url: { type: 'string' },
+        title: { type: 'string' },
+      },
+    },
   })
-  images: { s3Key: string; s3Url: string }[];
+  images: { s3Key: string; s3Url: string; title?: string }[];
 }
 
 export class UpdateAssetDto extends PartialType(CreateAssetDto) {}
