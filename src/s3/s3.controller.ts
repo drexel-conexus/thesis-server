@@ -8,6 +8,7 @@ import {
   Delete,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   FileFieldsInterceptor,
@@ -15,8 +16,9 @@ import {
 } from '@nestjs/platform-express';
 import { S3Service } from './s3.service';
 import { Express } from 'express';
-import { ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { uploadImage } from './s3.dto';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller({
   path: 'upload',
@@ -25,6 +27,8 @@ import { uploadImage } from './s3.dto';
 export class UploadController {
   constructor(private readonly s3Service: S3Service) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
@@ -49,6 +53,8 @@ export class UploadController {
     return { s3Key: s3Key, s3Url: this.s3Service.getPublicUrl(s3Key) };
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete('delete')
   async deleteFile(@Query('s3Key') s3Key: string) {
     await this.s3Service.deleteFile(s3Key);

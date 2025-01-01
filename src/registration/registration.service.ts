@@ -10,15 +10,48 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class RegistrationService {
   constructor(
-    @InjectModel(Registration.modelName)
+    @InjectModel(Registration.name)
     private registrationModel: Model<Registration>,
   ) {}
 
-  create(createRegistrationDto: CreateRegistrationDto) {
-    return this.registrationModel.create(createRegistrationDto);
+  private generateFileKey(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
   }
 
-  findAll() {
+  async create(createRegistrationDto: CreateRegistrationDto) {
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts) {
+      try {
+        const registration = new this.registrationModel(createRegistrationDto);
+        return await registration.save();
+      } catch (error) {
+        if (error.code === 11000 && error.keyPattern?.fileKey) {
+          // Duplicate key error, try again with a new key
+          createRegistrationDto.fileKey = this.generateFileKey();
+          attempts++;
+          continue;
+        }
+        throw error;
+      }
+    }
+    throw new Error(
+      'Unable to generate unique file key after maximum attempts',
+    );
+  }
+
+  findAll(fileNumber?: string) {
+    if (fileNumber) {
+      return this.registrationModel.find({
+        fileNumber: new RegExp(fileNumber),
+      });
+    }
     return this.registrationModel.find();
   }
 

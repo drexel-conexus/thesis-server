@@ -8,6 +8,9 @@ export class Registration {
   static modelName = 'Registration';
 
   @Prop({ required: true, unique: true, index: true })
+  fileNumber: string;
+
+  @Prop({ required: true, unique: true, index: true })
   email: string;
 
   @Prop({ required: true })
