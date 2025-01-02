@@ -12,13 +12,13 @@ import {
 import { EventsService } from './events.service';
 import { CreateEventDto, UpdateEventDto } from './dto/event.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JWTAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
@@ -35,21 +35,21 @@ export class EventsController {
     return this.eventsService.getCurrentMonthEvents(month);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
     return this.eventsService.update(id, updateEventDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {

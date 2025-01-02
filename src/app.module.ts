@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
@@ -9,6 +9,7 @@ import { AnnouncementModule } from './announcement/announcement.module';
 import { S3Module } from './s3/s3.module';
 import { AssetModule } from './asset/asset.module';
 import { RegistrationModule } from './registration/registration.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +25,7 @@ import { RegistrationModule } from './registration/registration.module';
       },
     }),
     S3Module,
+    AuthModule,
     UserModule,
     EventsModule,
     AnnouncementModule,

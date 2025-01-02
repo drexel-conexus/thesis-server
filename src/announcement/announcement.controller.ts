@@ -13,14 +13,14 @@ import {
   CreateAnnouncementDto,
   UpdateAnnouncementDto,
 } from './dto/announcement.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { JWTAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('announcements')
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
@@ -32,14 +32,14 @@ export class AnnouncementController {
     return this.announcementService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.announcementService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Patch(':id')
   update(
@@ -49,7 +49,7 @@ export class AnnouncementController {
     return this.announcementService.update(id, updateAnnouncementDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {

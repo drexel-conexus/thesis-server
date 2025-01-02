@@ -15,7 +15,7 @@ import {
   CreateRegistrationDto,
   UpdateRegistrationDto,
 } from './dto/registration.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JWTAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('registration')
 export class RegistrationController {
@@ -39,14 +39,14 @@ export class RegistrationController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Get()
   findAll(@Query('fileNumber') fileNumber: string) {
     return this.registrationService.findAll(fileNumber);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {

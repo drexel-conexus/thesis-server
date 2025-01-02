@@ -18,7 +18,7 @@ import { S3Service } from './s3.service';
 import { Express } from 'express';
 import { ApiBearerAuth, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { uploadImage } from './s3.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JWTAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller({
   path: 'upload',
@@ -27,7 +27,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 export class UploadController {
   constructor(private readonly s3Service: S3Service) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -53,7 +53,7 @@ export class UploadController {
     return { s3Key: s3Key, s3Url: this.s3Service.getPublicUrl(s3Key) };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Delete('delete')
   async deleteFile(@Query('s3Key') s3Key: string) {
