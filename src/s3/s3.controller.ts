@@ -27,8 +27,6 @@ import { JWTAuthGuard } from 'src/auth/jwt.guard';
 export class UploadController {
   constructor(private readonly s3Service: S3Service) {}
 
-  @UseGuards(JWTAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(

@@ -26,14 +26,19 @@ export class RegistrationService {
   async create(createRegistrationDto: CreateRegistrationDto) {
     let attempts = 0;
     const maxAttempts = 5;
-
+    if (!createRegistrationDto.fileNumber) {
+      createRegistrationDto.fileNumber = this.generateFileKey();
+    }
     while (attempts < maxAttempts) {
       try {
-        const registration = new this.registrationModel(createRegistrationDto);
-        return await registration.save();
+        console.log(createRegistrationDto);
+        const registration = await this.registrationModel.create(
+          createRegistrationDto,
+        );
+        return registration;
       } catch (error) {
+        console.log(error);
         if (error.code === 11000 && error.keyPattern?.fileKey) {
-          // Duplicate key error, try again with a new key
           createRegistrationDto.fileKey = this.generateFileKey();
           attempts++;
           continue;
