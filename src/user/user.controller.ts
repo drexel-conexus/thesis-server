@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto, PasswordResetDto, UpdateUserDto } from './dto/user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { JWTAuthGuard } from 'src/auth/jwt.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @Controller({
   version: '1',
@@ -23,6 +25,23 @@ export class UserController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
   ) {}
+
+  @UseGuards(JWTAuthGuard)
+  @ApiBearerAuth()
+  @Get('current')
+  current(@Req() req: Request) {
+    return this.userService.current(req);
+  }
+
+  @UseGuards(JWTAuthGuard)
+  @ApiBearerAuth()
+  @Get('/:id/password-reset')
+  passwordReset(
+    @Param('id') id: string,
+    @Body() passwordResetDto: PasswordResetDto,
+  ) {
+    return this.userService.passwordReset(id, passwordResetDto);
+  }
 
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()

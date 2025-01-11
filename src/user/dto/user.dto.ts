@@ -54,6 +54,42 @@ export class CreateUserDto {
     description: 'Password of the user',
   })
   password: string;
+
+  @IsOptional()
+  @ApiProperty({
+    type: 'object',
+    description: 'Image of the user',
+  })
+  image?: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class PasswordResetDto {
+  @IsString()
+  @IsDefined()
+  @ApiProperty({
+    type: 'string',
+    description: 'Old password of the user',
+  })
+  oldPassword: string;
+
+  @IsString()
+  @IsDefined()
+  @ApiProperty({
+    type: 'string',
+    description: 'New password of the user',
+  })
+  newPassword: string;
+
+  @IsString()
+  @IsDefined()
+  @ApiProperty({
+    type: 'string',
+    description: 'Confirm password of the user',
+  })
+  confirmPassword: string;
+}

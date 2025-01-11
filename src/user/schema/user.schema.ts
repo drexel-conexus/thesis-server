@@ -22,6 +22,12 @@ export class User {
 
   @Prop({ required: true })
   password: string;
+
+  @Prop({ required: false, type: Object })
+  image?: {
+    s3Key: string;
+    s3Url: string;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
