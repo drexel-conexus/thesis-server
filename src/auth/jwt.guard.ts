@@ -33,7 +33,7 @@ export class JWTAuthGuard implements CanActivate {
       // so that we can access it in our route handlers
       request['user'] = payload;
     } catch {
-      throw new Error('Invalid token');
+      throw new UnauthorizedException();
     }
     return true;
   }
