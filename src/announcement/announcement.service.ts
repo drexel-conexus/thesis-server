@@ -36,7 +36,18 @@ export class AnnouncementService {
   }
 
   findAll() {
-    return this.model.find();
+    return this.model.find().sort({ createdAt: -1 });
+  }
+
+  findAllWeb() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    return this.model
+      .find({
+        $and: [{ startDate: { $lte: now } }, { endDate: { $gte: today } }],
+      })
+      .sort({ createdAt: -1 });
   }
 
   findOne(id: string): Promise<AnnouncementDocument> {

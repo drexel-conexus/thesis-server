@@ -16,6 +16,7 @@ import {
   UpdateRegistrationDto,
 } from './dto/registration.dto';
 import { JWTAuthGuard } from 'src/auth/jwt.guard';
+import { query } from 'express';
 
 @Controller('registration')
 export class RegistrationController {
@@ -42,8 +43,18 @@ export class RegistrationController {
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
   @Get()
-  findAll(@Query('fileNumber') fileNumber: string) {
-    return this.registrationService.findAll(fileNumber);
+  findAll(
+    @Query('gradeToEnroll') gradeToEnroll: string,
+    @Query('fileNumber') fileNumber: string,
+  ) {
+    const query: Record<string, any> = {};
+    if (gradeToEnroll) {
+      query.gradeToEnroll = { $in: gradeToEnroll.split(',') };
+    }
+    if (fileNumber) {
+      query.fileNumber = new RegExp(fileNumber);
+    }
+    return this.registrationService.findAll(query);
   }
 
   @UseGuards(JWTAuthGuard)

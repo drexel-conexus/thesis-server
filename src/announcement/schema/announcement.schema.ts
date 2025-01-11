@@ -13,10 +13,10 @@ export class Announcement {
   @Prop({ required: false })
   body: string;
 
-  @Prop({ required: false, type: Date })
+  @Prop({ required: true })
   startDate: Date;
 
-  @Prop({ required: false, type: Date })
+  @Prop({ required: true })
   endDate: Date;
 
   @Prop({ required: true, default: true })

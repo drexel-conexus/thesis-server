@@ -30,7 +30,7 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  @Get('current-month')
+  @Get('web/current-month')
   getCurrentMonthEvents(@Query('month') month?: number) {
     return this.eventsService.getCurrentMonthEvents(month);
   }

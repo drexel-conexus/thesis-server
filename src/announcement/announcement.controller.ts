@@ -27,9 +27,14 @@ export class AnnouncementController {
     return this.announcementService.create(createAnnouncementDto);
   }
 
-  @Get()
+  @Get('')
   findAll() {
     return this.announcementService.findAll();
+  }
+
+  @Get('web')
+  getCurrentMonthAnnouncements() {
+    return this.announcementService.findAllWeb();
   }
 
   @UseGuards(JWTAuthGuard)

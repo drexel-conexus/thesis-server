@@ -14,22 +14,31 @@ export class EventsService {
     return this.model.create(createEventDto);
   }
 
-  getCurrentMonthEvents(month?: number) {
+  async getCurrentMonthEvents(month?: number) {
     const now = new Date();
-    const targetMonth = month !== undefined ? month : now.getMonth();
-    const startOfMonth = new Date(now.getFullYear(), targetMonth, 1);
-    const endOfMonth = new Date(now.getFullYear(), targetMonth + 1, 0);
+    const targetMonth = month || now.getMonth() + 1;
+    const targetYear = now.getFullYear();
 
-    return this.model.find({
-      date: {
-        $gte: startOfMonth,
-        $lte: endOfMonth,
-      },
-    });
+    const startOfMonth = new Date(targetYear, targetMonth - 1, 1);
+    const endOfMonth = new Date(targetYear, targetMonth, 0);
+
+    const startDate =
+      targetMonth === now.getMonth() + 1
+        ? new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        : startOfMonth;
+
+    return this.model
+      .find({
+        date: {
+          $gte: startDate,
+          $lte: endOfMonth,
+        },
+      })
+      .sort({ date: 1 });
   }
 
   findAll() {
-    return this.model.find();
+    return this.model.find().sort({ createdAt: -1 });
   }
 
   findOne(id: string) {

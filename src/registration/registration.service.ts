@@ -51,13 +51,8 @@ export class RegistrationService {
     );
   }
 
-  findAll(fileNumber?: string) {
-    if (fileNumber) {
-      return this.registrationModel.find({
-        fileNumber: new RegExp(fileNumber),
-      });
-    }
-    return this.registrationModel.find();
+  findAll(query?: Record<string, any>) {
+    return this.registrationModel.find(query);
   }
 
   findOne(id: string) {
