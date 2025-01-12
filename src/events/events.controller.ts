@@ -53,6 +53,6 @@ export class EventsController {
   @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.eventsService.remove(+id);
+    return this.eventsService.remove(id);
   }
 }

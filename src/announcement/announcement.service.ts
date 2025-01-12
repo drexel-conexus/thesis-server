@@ -63,7 +63,12 @@ export class AnnouncementService {
     await doc.save();
   }
 
-  remove(id: string) {
-    return this.model.deleteOne({ id });
+  async remove(id: string) {
+    const doc = await this.findOne(id);
+    if (!doc) {
+      throw new NotFoundException(`Announcement with ID ${id} not found`);
+    }
+    await doc.deleteOne();
+    return { message: 'Announcement deleted successfully' };
   }
 }

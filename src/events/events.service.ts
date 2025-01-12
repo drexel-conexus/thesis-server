@@ -54,7 +54,12 @@ export class EventsService {
     await doc.save();
   }
 
-  remove(id: number) {
-    return this.model.deleteOne({ id });
+  async remove(id: string) {
+    const doc = await this.findOne(id);
+    if (!doc) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+    await doc.deleteOne();
+    return { message: 'Event deleted successfully' };
   }
 }
