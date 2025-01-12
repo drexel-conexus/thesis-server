@@ -17,7 +17,7 @@ import { UserModule } from 'src/user/user.module';
     }),
     JwtModule.register({
       secret: 'secret',
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '24h' },
     }),
     forwardRef(() => UserModule),
   ],

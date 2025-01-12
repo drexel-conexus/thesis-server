@@ -35,7 +35,7 @@ export class UserController {
 
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth()
-  @Get('/:id/password-reset')
+  @Post('/:id/password-reset')
   passwordReset(
     @Param('id') id: string,
     @Body() passwordResetDto: PasswordResetDto,

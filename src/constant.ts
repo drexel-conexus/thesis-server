@@ -4,6 +4,11 @@ export enum UserType {
   USER = 'user',
 }
 
+export enum FileType {
+  IMAGE = 'image',
+  FILE = 'file',
+}
+
 export enum GradeLevel {
   NURSERY = 'Nursery',
   PRE_KINDER = 'Pre-Kinder',

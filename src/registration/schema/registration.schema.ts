@@ -3,14 +3,20 @@ import { HydratedDocument } from 'mongoose';
 
 export enum GradeLevel {
   NURSERY = 'nursery',
+  PRE_KINDER = 'pre-kinder',
   KINDER = 'kinder',
-  PREP = 'prep',
-  GRADE1 = 'grade1',
-  GRADE2 = 'grade2',
-  GRADE3 = 'grade3',
-  GRADE4 = 'grade4',
-  GRADE5 = 'grade5',
-  GRADE6 = 'grade6',
+  GRADE1 = 'grade-1',
+  GRADE2 = 'grade-2',
+  GRADE3 = 'grade-3',
+  GRADE4 = 'grade-4',
+  GRADE5 = 'grade-5',
+  GRADE6 = 'grade-6',
+  GRADE7 = 'grade-7',
+  GRADE8 = 'grade-8',
+  GRADE9 = 'grade-9',
+  GRADE10 = 'grade-10',
+  GRADE11 = 'grade-11',
+  GRADE12 = 'grade-12',
 }
 
 export type RegistrationDocument = HydratedDocument<Registration>;
@@ -43,10 +49,10 @@ export class Registration {
   @Prop({ required: true, enum: ['male', 'female'] })
   sex: 'male' | 'female';
 
-  @Prop({ required: true, enum: ['single', 'married', 'divorced', 'widowed'] })
+  @Prop({ required: false, enum: ['single', 'married', 'divorced', 'widowed'] })
   maritalStatus: 'single' | 'married' | 'divorced' | 'widowed';
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   birthPlace: string;
 
   @Prop({ required: true })

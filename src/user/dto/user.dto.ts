@@ -84,12 +84,4 @@ export class PasswordResetDto {
     description: 'New password of the user',
   })
   newPassword: string;
-
-  @IsString()
-  @IsDefined()
-  @ApiProperty({
-    type: 'string',
-    description: 'Confirm password of the user',
-  })
-  confirmPassword: string;
 }
